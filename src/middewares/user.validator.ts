@@ -26,4 +26,16 @@ export const ValidateUser = (
   }
 };
 
-//  todo Add global error handlers and async handlers
+export const ValidateEmail = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const emailvalidation = z.string().email("Invalid email format");
+  const result = emailvalidation.safeParse(req.params.email);
+  if (!result.success) {
+    res.status(400).json({ code: 400, msg: result.error.issues[0].message });
+  } else {
+    next();
+  }
+};
