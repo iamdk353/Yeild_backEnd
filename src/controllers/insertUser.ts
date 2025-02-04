@@ -4,8 +4,10 @@ import { usersTable } from "../DB/schema";
 import HandleAsync from "../middewares/handle.Async";
 
 const insertUser = HandleAsync(async (req: Request, res: Response) => {
-  const data = await db.insert(usersTable).values(req.body);
-  console.log(data);
+  const data = await db
+    .insert(usersTable)
+    .values({ ...req.body, onboarded: true });
+  // console.log(data);.
   res.json({ code: 200, msg: "User added to DB" });
 });
 
