@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import z from "zod";
+
 export const userValidator = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.string().email("email is required"),
@@ -26,12 +27,12 @@ export const ValidateUser = (
   }
 };
 
+export const emailvalidation = z.string().email("Invalid email format");
 export const ValidateEmail = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const emailvalidation = z.string().email("Invalid email format");
   const result = emailvalidation.safeParse(req.params.email);
   if (!result.success) {
     res.status(400).json({ code: 400, msg: result.error.issues[0].message });

@@ -1,10 +1,17 @@
 import express from "express";
 import cors from "cors";
-import { db } from "./DB/connect";
-import { usersTable } from "./DB/schema";
+
 import { ValidateEmail, ValidateUser } from "./middewares/user.validator";
 import insertUser from "./controllers/insertUser";
 import getUser from "./controllers/getUser";
+import { validateProdQuery } from "./middewares/prodQuey.validator";
+import getProducts from "./controllers/products/getProducts";
+import createProduct from "./controllers/products/createProduct";
+import {
+  validateAcceptProduct,
+  ValidateProduct,
+} from "./middewares/product.validator";
+import acceptProduct from "./controllers/products/acceptProduct";
 
 const app = express();
 app.use(cors());
@@ -15,6 +22,9 @@ app.get("/", (req, res) => {
 });
 app.get("/user/:email", ValidateEmail, getUser);
 app.post("/users", ValidateUser, insertUser);
+app.get("/products", validateProdQuery, getProducts);
+app.post("/products", ValidateProduct, createProduct);
+app.patch("/product-accept", validateAcceptProduct, acceptProduct);
 
 app.listen(8080, () => {
   console.log("server started");
