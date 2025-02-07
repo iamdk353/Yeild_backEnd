@@ -22,7 +22,7 @@ const getProducts = HandleAsync(async (req: Request, res: Response) => {
     .where(isNull(productsTable.farmerId))
     .leftJoin(usersTable, eq(productsTable.buyerId, usersTable.email));
   if (data.length !== 0) {
-    res.json(data);
+    res.json(data.reverse());
     return;
   }
   res.json(successResp("no contracts in DB"));

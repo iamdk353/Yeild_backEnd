@@ -23,7 +23,6 @@ const acceptProduct = HandleAsync(async (req: Request, res: Response) => {
     if (resp.length !== 0) {
       await db.update(productsTable).set({
         farmerId: farmerEmail,
-        isAccepted: true,
       });
     } else {
       res.json(ErrorResp(404, "product not found "));

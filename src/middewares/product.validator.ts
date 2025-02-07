@@ -10,7 +10,6 @@ export const ValidateProduct = (
   const productValidator = z.object({
     farmerId: z.string().email().nullable().default(null),
     buyerId: z.string().email(),
-    isAccepted: z.boolean().default(false),
     quantity: z.number().positive(),
     productName: z.string().nonempty(),
     price: z.number().positive(),

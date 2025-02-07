@@ -23,18 +23,17 @@ export const productsTable = pgTable("products", {
   productId: integer().generatedAlwaysAsIdentity().primaryKey(),
   farmerId: text("farmerId").references(() => usersTable.email),
   buyerId: text("buyerId").references(() => usersTable.email),
-  isAccepted: boolean().default(false),
   quantity: doublePrecision(),
   productName: text(),
   price: doublePrecision(),
   deliveryDate: date({ mode: "string" }),
+  farmerTerms: text(),
+  buyerTerms: text(),
 });
 
 export const contractsTable = pgTable("contracts", {
   productId: integer("productID").references(() => productsTable.productId),
   contractId: integer().generatedAlwaysAsIdentity().primaryKey(),
-  farmerTerms: text(),
-  buyerTerms: text(),
   farmerAccepted: boolean().default(false),
   BuyerAccepted: boolean().default(false),
 });
