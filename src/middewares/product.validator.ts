@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { z } from "zod";
+import { string, z } from "zod";
 import { ErrorResp } from "../utils/create.error.obj";
 import { emailvalidation } from "./user.validator";
 export const ValidateProduct = (
@@ -48,11 +48,33 @@ export const validateAcceptProduct = (
   res: Response,
   next: NextFunction
 ) => {
-  const acceptProductValidator = z.object({
-    email: emailvalidation,
-    id: z.number().nonnegative(),
-  });
+  const acceptProductValidator = z
+    .object({
+      email: emailvalidation,
+      id: z.number().nonnegative(),
+      farmerTerms: string().nullable().default(null),
+    })
+    .strict();
   const result = acceptProductValidator.safeParse(req.body);
+  if (!result.success) {
+    res.status(400).json(ErrorResp(400, result.error));
+  } else {
+    next();
+  }
+};
+
+export const validateGetMyProducts = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const getMyProductsValidator = z
+    .object({
+      email: emailvalidation,
+      userType: z.enum(["farmer", "buyer"]),
+    })
+    .strict();
+  const result = getMyProductsValidator.safeParse(req.body);
   if (!result.success) {
     res.status(400).json(ErrorResp(400, result.error));
   } else {

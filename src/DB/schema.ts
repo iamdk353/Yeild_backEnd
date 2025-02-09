@@ -29,11 +29,6 @@ export const productsTable = pgTable("products", {
   deliveryDate: date({ mode: "string" }),
   farmerTerms: text(),
   buyerTerms: text(),
-});
-
-export const contractsTable = pgTable("contracts", {
-  productId: integer("productID").references(() => productsTable.productId),
-  contractId: integer().generatedAlwaysAsIdentity().primaryKey(),
   farmerAccepted: boolean().default(false),
   BuyerAccepted: boolean().default(false),
 });

@@ -3,7 +3,7 @@ import { z } from "zod";
 import { ErrorResp } from "../../utils/create.error.obj";
 import HandleAsync from "../../middewares/handle.Async";
 import { db } from "../../DB/connect";
-import { productsTable } from "../../DB/schema";
+import { productsTable, usersTable } from "../../DB/schema";
 import { eq } from "drizzle-orm";
 import { successResp } from "../../utils/success.obj";
 
@@ -17,9 +17,20 @@ const getAproducts = HandleAsync(async (req: Request, res: Response) => {
   }
 
   const resp = await db
-    .select()
+    .select({
+      productId: productsTable.productId,
+      productName: productsTable.productName,
+      price: productsTable.price,
+      quantity: productsTable.quantity,
+      buyerId: productsTable.buyerId,
+      deliveryDate: productsTable.deliveryDate,
+      buyerName: usersTable.name,
+      farmerTerms: productsTable.farmerTerms,
+      buyerTerms: productsTable.buyerTerms,
+    })
     .from(productsTable)
-    .where(eq(productsTable.productId, id));
+    .where(eq(productsTable.productId, id))
+    .leftJoin(usersTable, eq(productsTable.buyerId, usersTable.email));
   if (resp.length === 0) {
     res.status(404).json(ErrorResp(404, "product not found"));
     return;

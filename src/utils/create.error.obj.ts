@@ -6,6 +6,7 @@ export const ErrorResp = (code?: number, msg?: string | z.ZodError<any>) => {
     msg:
       typeof msg === "string"
         ? msg
-        : msg?.errors[0].message || "internal server error",
+        : msg?.errors[0].message + " " + msg?.errors[0].path ||
+          "internal server error",
   };
 };
